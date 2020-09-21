@@ -1,28 +1,45 @@
 import requests
 from bs4 import BeautifulSoup
 from get_url import *
+import re
 
-def ducks_in(is_duck: str): #checks how many ducks are sold together
+def ducks_in(is_duck: str):  # checks how many ducks are sold together
 
+    string = ''
     ducks = 1
-    string =''
+
     try:
-        if 'szt' or 'sztuk' in is_duck:
+        if 'szt' or 'sztuk' in is_duck.lower():
+            split = is_duck.split()
 
-            for word in is_duck.split():
-
-                if 'sz'.lower() in word:
-
+            for word in split:
+                if 'szt' in word.lower():
                     digits = [i for i in word if i.isdigit()]
 
                     for digit in digits:
                         string += digit
 
                     ducks = int(string)
-        #else:
-            #ducks = 1
+                    break
+
+                elif word.isdigit():
+                    try:
+                        digit = word + (split[split.index(word) + 1])
+                        print(digit)
+                    except IndexError:
+                        break
+
+                    if 'szt' or 'sztuk' in digit.lower():
+                        digits = [i for i in word if i.isdigit()]
+
+                        for digit in digits:
+                            string += digit
+
+                        ducks = int(string)
+                        break
+
     except:
-        ducks = 1
+        pass
 
     return ducks
 
