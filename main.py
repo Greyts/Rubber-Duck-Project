@@ -18,7 +18,17 @@ def get_page(url): # preparing the soup
 
 def get_ducks(soup): # getting the ducks and amount sold
 
-    is_duck = soup.find('h1').get_text().strip('<h1>')
+    try:
+        is_duck = soup.find('h1').get_text().strip('<h1>')
+    except:
+        pass
+
+    try:
+        ducks_sold = soup.find('div', class_="_9a071_RRpJq _9a071_2sZmp _1h7wt").get_text().strip('<div>')
+        print(ducks_sold)
+    except:
+        pass
+
     print(type(is_duck))
     print(is_duck)
 
