@@ -23,8 +23,18 @@ def get_list_of_pages(soup): # puts all the links to each posting in a list
 
     return links
 
+def get_number_of_pages(soup): # determines number of pages
+
+    try:
+        number_of_pages = soup.find('span', class_="_1h7wt _1fkm6 _g1gnj _3db39_3i0GV _3db39_XEsAE").get_text().strip('span')
+    except:
+        number_of_pages = 0
+
+    return number_of_pages
+
 if __name__ == '__main__':
 
 
-    soup = get_multiple_pages('https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717')
-    get_list_of_pages(soup)
+    soup = get_multiple_pages('https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717&p=1')
+    # get_list_of_pages(soup)
+    print(get_number_of_pages(soup))

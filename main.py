@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from get_url import *
 import re
 
-def ducks_in(is_duck: str):  # checks how many ducks are sold together
+def ducks_in(is_duck: str):  # checks how many ducks are sold in packages
 
     string = ''
     ducks = 1
@@ -25,7 +25,6 @@ def ducks_in(is_duck: str):  # checks how many ducks are sold together
                 elif word.isdigit():
                     try:
                         digit = word + (split[split.index(word) + 1])
-                        print(digit)
                     except IndexError:
                         break
 
@@ -44,7 +43,7 @@ def ducks_in(is_duck: str):  # checks how many ducks are sold together
     return ducks
 
 
-def ducks_total(string_sold: str, ducks_together: int): #strips string to return integer of sold ducks (multiplies sold sets by amount of ducks in a single set)
+def ducks_total(string_sold: str, ducks_together: int): #strips string to return integer of sold ducks (multiplies sold sets by amount of ducks in a single package)
 
     try:
         digits =[digit for digit in string_sold.split() if digit.isdigit()]
@@ -67,7 +66,7 @@ def get_page(url): # preparing the soup
 
 
 
-def get_ducks(soup): # getting the ducks and amount sold
+def get_ducks(soup, page): # getting the ducks and amount sold
 
     try:
         is_duck = soup.find('h1').get_text().strip('<h1>')
@@ -86,7 +85,8 @@ def get_ducks(soup): # getting the ducks and amount sold
     data = {
         'title': is_duck,
         'sold' : total_ducks,
-        'ducks sold together' : ducks_together
+        'ducks sold together' : ducks_together,
+        'link' : page
     }
 
     print(data)
@@ -96,14 +96,37 @@ def get_ducks(soup): # getting the ducks and amount sold
 def main(url):
 
     soup = get_page(url)
-    get_ducks(soup)
+    try:
+        number_of_pages = get_number_of_pages(soup)
+    except:
+        number_of_pages = 1
 
 
+
+    for x in range(int(number_of_pages)+1):
+
+        try:
+            links = get_list_of_pages(get_multiple_pages(f'{url}{x+1}'))
+            print(f'{url}{x+1}')
+            for page in links:
+                soup = get_page(page)
+                ducks = get_ducks(soup, page)
+        except:
+            pass
+
+    return ducks
 
 if __name__ == '__main__':
 
+    url = 'https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717&p='
+    main(url)
 
-    links = get_list_of_pages(get_multiple_pages('https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717'))
-    for url in links:
-        main(url)
-
+    # for x in range(number_of_pages+1): # in range(99) aims to scout trough all the pages available until every single page has been searched  TRZEBA NAPRAWIć BO SIĘ ZAPĘTLA
+    #     try:
+    #         links = get_list_of_pages(get_multiple_pages(f'{url}{x}'))
+    #
+    #         for url in links:
+    #             main(url)
+    #
+    #     except:
+    #         pass
