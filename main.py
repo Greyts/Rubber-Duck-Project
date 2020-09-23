@@ -78,8 +78,6 @@ def get_ducks(soup, page): # getting the ducks and amount sold
         'link' : page
     }
 
-    #print(data)
-
     return data
 
 
@@ -106,10 +104,7 @@ def main(url):
                     soup = get_page(page)
                     data = get_ducks(soup, page)
                     ducks.append(data)
-                    # if links.index(page) == 0 and x == 0:
-                    #     write_csv(data, 'w')
-                    # else:
-                    #     write_csv(data, 'a')
+
         except:
             pass
 
