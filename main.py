@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from get_url import *
-import re
+from write_csv import *
+
 
 def ducks_in(is_duck: str):  # checks how many ducks are sold in packages
 
@@ -77,7 +78,7 @@ def get_ducks(soup, page): # getting the ducks and amount sold
         'link' : page
     }
 
-    print(data)
+    #print(data)
 
     return data
 
@@ -103,7 +104,12 @@ def main(url):
                     pass
                 else:
                     soup = get_page(page)
-                    ducks.append(get_ducks(soup, page))
+                    data = get_ducks(soup, page)
+                    ducks.append(data)
+                    # if links.index(page) == 0 and x == 0:
+                    #     write_csv(data, 'w')
+                    # else:
+                    #     write_csv(data, 'a')
         except:
             pass
 
@@ -112,5 +118,5 @@ def main(url):
 if __name__ == '__main__':
 
     url = 'https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717&p='
-    main(url)
-
+    ducks = main(url)
+    write_csv(ducks)
