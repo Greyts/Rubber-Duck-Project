@@ -45,9 +45,3 @@ def get_number_of_pages(soup): # determines number of pages
 
     return number_of_pages
 
-if __name__ == '__main__':
-
-
-    soup = get_multiple_pages('https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717&p=1')
-    # get_list_of_pages(soup)
-    print(get_number_of_pages(soup))
