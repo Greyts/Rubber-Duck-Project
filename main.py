@@ -53,18 +53,6 @@ def ducks_total(string_sold: str, ducks_together: int): #strips string to return
 
     return sold_packages * ducks_together
 
-def get_page(url): # preparing the soup
-
-    result = requests.get(url)
-
-    if not result.ok: # checking if the page responded
-        print('Server responded: ', result.status_code)
-    else:
-        print('Server responded correctly: ', result.status_code)
-        soup = BeautifulSoup(result.text, 'lxml')
-    return soup
-
-
 
 def get_ducks(soup, page): # getting the ducks and amount sold
 
@@ -93,6 +81,7 @@ def get_ducks(soup, page): # getting the ducks and amount sold
 
     return data
 
+
 def main(url):
 
     soup = get_page(url)
@@ -101,16 +90,20 @@ def main(url):
     except:
         number_of_pages = 1
 
-
+    ducks = []
 
     for x in range(int(number_of_pages)+1):
 
         try:
             links = get_list_of_pages(get_multiple_pages(f'{url}{x+1}'))
             print(f'{url}{x+1}')
+
             for page in links:
-                soup = get_page(page)
-                ducks = get_ducks(soup, page)
+                if page in ducks:
+                    pass
+                else:
+                    soup = get_page(page)
+                    ducks.append(get_ducks(soup, page))
         except:
             pass
 
@@ -121,12 +114,3 @@ if __name__ == '__main__':
     url = 'https://allegro.pl/kategoria/zabawki-do-kapieli-19416?string=kaczuszka%20gumowa&bmatch=baseline-product-eyesa2-engag-dict45-bab-1-3-0717&p='
     main(url)
 
-    # for x in range(number_of_pages+1): # in range(99) aims to scout trough all the pages available until every single page has been searched  TRZEBA NAPRAWIć BO SIĘ ZAPĘTLA
-    #     try:
-    #         links = get_list_of_pages(get_multiple_pages(f'{url}{x}'))
-    #
-    #         for url in links:
-    #             main(url)
-    #
-    #     except:
-    #         pass

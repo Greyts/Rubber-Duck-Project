@@ -1,6 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 
+
+
+def get_page(url): # preparing the soup
+
+    result = requests.get(url)
+
+    if not result.ok: # checking if the page responded
+        print('Server responded: ', result.status_code)
+    else:
+        print('Server responded correctly: ', result.status_code)
+        soup = BeautifulSoup(result.text, 'lxml')
+    return soup
+
 def get_multiple_pages(url): # preparing the soup out of the search outcome
 
     result = requests.get(url)
